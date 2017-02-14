@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if not docs %}
+<div class="jumbotron">
+  <h2>gs2json</h2>
+  <p>No spreadsheets.</p>
+  <p><a class="btn btn-primary btn-lg" href="https://docs.google.com/spreadsheets/" target="_blank" role="button">
+    Start a new spreadsheet or share
+  </a></p>
+  <p> share email: <mark>{{ info.accessorEmail }}</mark></p>
+</div>
+{% else %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th></th>
+      <th>Updated</th>
+      <th>Mode</th>
+      <th>Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for doc in docs %}
+    <tr>
+      <td>
+        {{ doc.title }}
+        {% if info.isadmin %}
+        <br />
+        <small class="text-right">{{ doc.author }}</small>
+        {% endif %}
+      </td>
+      <td>
+        {% if doc.doc_mode == 'trans' %}
+          <a class="btn btn-info btn-sm" href="{{ url_for('json_data', key=doc.key, pass=info.private_pass(), lang='english') }}" target="_blank" role="button">
+          English
+          </a>
+          <a class="btn btn-info btn-sm" href="{{ url_for('json_data', key=doc.key, pass=info.private_pass(), lang='korean') }}" target="_blank" role="button">
+          Korean
+          </a>
+          <a class="btn btn-info btn-sm" href="{{ url_for('json_data', key=doc.key, pass=info.private_pass(), lang='chinese') }}" target="_blank" role="button">
+          Chinese
+          </a>
+          <a class="btn btn-info btn-sm" href="{{ url_for('json_data', key=doc.key, pass=info.private_pass(), lang='japanese') }}" target="_blank" role="button">
+          Japanese
+          </a>
+        {% else %}
+          <a class="btn btn-info btn-sm" href="{{ url_for('json_data', key=doc.key, pass=info.private_pass()) }}" target="_blank" role="button">
+            JSON
+          </a>
+        {% endif %}
+
+        {% if info.isadmin %}
+        <a class="btn btn-default btn-sm" href="{{ url_for('table_view', docid=doc.id) }}" target="_blank" role="button">
+          Table
+        </a>
+        {% endif %}
+        <a class="btn btn-default btn-sm" href="https://docs.google.com/spreadsheets/d/{{ doc.id }}/edit" target="_blank" role="button">
+          Edit
+        </a>
+      </td>
+      <td><small>{{ doc.updated }}</small></td>
+      <td>
+        {% if doc.doc_mode == 'normal' %}
+        <span class="label label-primary">Structured</span>
+        {% elif doc.doc_mode == 'trans' %}
+        <span class="label label-success">Translations</span>
+        {% else %}
+        <span class="label label-default">{{ doc.doc_mode }}</span>
+        {% endif %}
+
+        <a class="btn btn-default btn-sm" href="{{ url_for('chmode', docid=doc.id, mode=doc.other_mode) }}" role="button">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          Change
+        </a>
+      </td>
+      <td>
+        {% if doc.doc_mode == 'normal' %}
+        {% for optName in ['typed', 'pretty'] %}
+          <a class="btn btn-default btn-sm" href="{{ url_for('choption', docid=doc.id, name=optName) }}" role="button"> {{ doc.getOptionDisplayString(optName) }} </a>
+        {% endfor %}
+        {% endif %}
+
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<a class="btn btn-danger btn-sm" href="{{ url_for('regen_pass') }}" role="button">
+  Regenerate Pass
+</a>
+
+{% endblock %}

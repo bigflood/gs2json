@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <h2>gs2json</h2>
+  <p>converts google spreadsheets to json.</p>
+  {% if not info.user %}
+  <p><a class="btn btn-primary btn-lg" href="{{ info.loginurl }}" role="button">
+      Login with Google
+  </a></p>
+  {% else %}
+  <p><a class="btn btn-info btn-lg" href="{{ url_for('list_docs') }}" role="button">
+      Document List
+  </a>
+  or <a class="btn btn-primary btn-lg" href="https://docs.google.com/spreadsheets/" target="_blank" role="button">
+    Start a new spreadsheet
+  </a></p>
+  <p> share email: <mark>{{ info.accessorEmail }}</mark></p>
+
+  {% endif %}
+</div>
+
+<dl class="dl-horizontal">
+{% if info.user %}
+<dt> You are </dt> <dd> {{ info.user }} </dd>
+{% endif %}
+
+<dt> Usage 1: </dt>
+<dd>
+   <a href="https://sites.google.com/site/gs2jsonhome/">
+      https://sites.google.com/site/gs2jsonhome/ </a>
+</dd>
+<dt> Usage 2: </dt>
+<dd>
+   <a href="https://github.com/coolengineer/excel2json">
+     https://github.com/coolengineer/excel2json </a>
+</dd>
+<dt> JSON libraries: </dt>
+<dd>
+  <a href="http://www.json.org/"> http://www.json.org/ </a>
+</dd>
+
+</dl>
+
+{% endblock %}

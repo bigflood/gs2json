@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for sheet in sheets %}
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">{{ sheet.title }}</div>
+  <table border="2">
+    <tbody>
+      {% for row in sheet.rows %}
+      <tr>
+        {% for col in row %}
+          <td bgcolor="#eeeeee" ><p>&nbsp; {{ col }} &nbsp;</p></td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<br />
+<br />
+{% endfor %}
+
+{% endblock %}
